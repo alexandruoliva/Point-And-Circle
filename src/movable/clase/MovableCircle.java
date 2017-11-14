@@ -15,19 +15,18 @@ public class MovableCircle implements Movable {
 			throws XoutOfPlainExc, YoutOfPlainExc, SpeedExc, RadiusExc {
 		
    // trebuie un check ca cercul sa fie in plan si fara constrangeri  
-		
-		
-			this.center = new MovablePoint(x, y, xSpeed, ySpeed);
+	
 		
 		if (radius < 0 || radius == 0 ) {
 			throw new RadiusExc("raza trebuie sa fie pozitiva");
 
 		} 
-		else if ( this.center < PLAIN_X_MAX && this.center > PLAIN_X_MIN)
+		else if ( (radius+x) > PLAIN_X_MAX  || (x-radius)< PLAIN_X_MIN || (radius + y)> PLAIN_Y_MAX || (y- radius)< PLAIN_Y_MIN)
 		{
-			
+			throw new  RadiusExc(" cercul este mai mare decat planul");
 		}
 		else {
+			this.center = new MovablePoint(x, y, xSpeed, ySpeed);
 			this.radius = radius;
 
 		}

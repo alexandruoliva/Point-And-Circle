@@ -50,7 +50,7 @@ public class MovablePoint implements Movable {
 		if (xSpeed > 0 && ySpeed > 0) {
 			this.xSpeed = xSpeed;
 			this.ySpeed = ySpeed;
-		} else {
+		} else if (xSpeed == 0 || ySpeed == 0 || xSpeed < 0 || ySpeed < 0) {
 			throw new SpeedExc(" viteza este  prea mica ");
 		}
 	}
@@ -134,6 +134,8 @@ public class MovablePoint implements Movable {
 	public void setySpeed(int ySpeed) throws SpeedExc {
 		if (ySpeed < 0) {
 			throw new SpeedExc("the ySpeed should be greater than 0");
+		} else if (ySpeed == 0) {
+			throw new SpeedExc("the ySpeed should be greater than 0");
 		}
 
 		else {
@@ -144,28 +146,40 @@ public class MovablePoint implements Movable {
 
 	@Override
 	public void moveUp() throws YoutOfPlainExc, HowMuchExc {
+		if ((this.getY() + this.getySpeed()) > PLAIN_Y_MAX || (this.getY() + this.getySpeed()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc(" punctul s-a  dus prea mult in sus ");
+		} else {
 			moveUp(ySpeed);
+		}
 
 	}
 
 	@Override
 	public void moveDown() throws YoutOfPlainExc, HowMuchExc {
-		
+		if ((this.getY() + this.getySpeed()) > PLAIN_Y_MAX || (this.getY() + this.getySpeed()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc(" punctul s-a  dus prea mult in jos  ");
+		} else {
 			moveDown(ySpeed);
+		}
 
 	}
 
 	@Override
 	public void moveLeft() throws XoutOfPlainExc, HowMuchExc {
-		
+		if ((this.getX() + this.getxSpeed()) > PLAIN_X_MAX || (this.getX() + this.getxSpeed()) < PLAIN_X_MIN) {
+			throw new HowMuchExc("punctul s-a dus prea mult in stanga ");
+		} else {
 			moveLeft(xSpeed);
-
+		}
 	}
 
 	@Override
 	public void moveRight() throws XoutOfPlainExc, HowMuchExc {
-		
+		if ((this.getX() + this.getxSpeed()) > PLAIN_X_MAX || (this.getX() + this.getxSpeed()) < PLAIN_X_MIN) {
+			throw new HowMuchExc("punctul s-a dus prea mult in dreapta ");
+		} else {
 			moveRight(xSpeed);
+		}
 
 	}
 
@@ -174,16 +188,8 @@ public class MovablePoint implements Movable {
 		if (howMuch < 0) {
 			throw new HowMuchExc(" nu poti misca punctul cu o valoare negativa");
 
-		} else if (howMuch > 0 )
+		} else if (howMuch > 0)
 			y += howMuch;
-		if(check(y)){
-			System.out.println("punctul s-a miscat in sus");
-		}
-		else
-		{
-			throw new HowMuchExc(" punctul nu s-a miscat in sus");
-			
-		}
 
 	}
 
@@ -192,18 +198,8 @@ public class MovablePoint implements Movable {
 		if (howMuch < 0) {
 			throw new HowMuchExc(" nu poti misca punctul cu o valoare negativa");
 
-		} else if(howMuch>0)
+		} else if (howMuch > 0)
 			y -= howMuch;
-		
-		if(check(y)){
-			System.out.println("punctul s-a miscat in jos");
-		}
-		else
-		{
-			throw new HowMuchExc(" punctul nu s-a miscat in jos ");
-			
-		}
-		
 
 	}
 
@@ -211,17 +207,10 @@ public class MovablePoint implements Movable {
 	public void moveLeft(int howMuch) throws HowMuchExc {
 		if (howMuch < 0) {
 			throw new HowMuchExc("You cannot move the point with a negative value");
-		} else if (howMuch>0){
+		} else if (howMuch > 0) {
 			x -= howMuch;
 		}
-		if(check(x)){
-			System.out.println("punctul s-a miscat in stanga ");
-		}
-		else
-		{
-			throw new HowMuchExc(" punctul nu s-a miscat in stanga");
-			
-		}
+
 	}
 
 	@Override
@@ -230,32 +219,23 @@ public class MovablePoint implements Movable {
 			throw new HowMuchExc("You cannot move the point with a negative value");
 		}
 
-		else if (howMuch>0){
+		else if (howMuch > 0) {
 			x += howMuch;
 		}
-		if(check(x)){
-			System.out.println("punctul s-a miscat in dreapta ");
-		}
-		else
-		{
-			throw new HowMuchExc(" punctul nu s-a miscat in dreapta");
-			
-		}
-		
 
 	}
-	
-	public boolean check ( int var){
+
+	public boolean check(int var) {
 		boolean i = false;
-		if(var < 0 || var==0 )
-		{ i= false;
+		if (var < 0 || var == 0 || var < -1000 || var > 1000) {
+			i = false;
 		}
-		if(var > 0){
-		  i = true;
+		if (var > 0) {
+			i = true;
 		}
-		
+
 		return i;
-		
+
 	}
 
 	@Override

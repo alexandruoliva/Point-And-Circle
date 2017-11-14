@@ -99,4 +99,5 @@ public interface Movable {
 	 * @throws XoutOfPlainExc
 	 */
 	void moveRight(int howMuch) throws HowMuchExc, XoutOfPlainExc, YoutOfPlainExc;
+
 }

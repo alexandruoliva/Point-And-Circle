@@ -16,12 +16,12 @@ public class MovableCircle implements Movable {
 
 		// trebuie un check ca cercul sa fie in plan si fara constrangeri
 
-		if (check(radius, x, y) == false) {
+		if (radius < 0 || radius == 0) {
 			throw new RadiusExc("raza trebuie sa fie pozitiva");
 
-		} else if (check(radius, x, y) == false) {
+		} else if (check(radius, x, y, xSpeed, ySpeed) == false) {
 			throw new RadiusExc(" cercul este mai mare decat planul");
-		} else if (check(radius, x, y)) {
+		} else if (check(radius, x, y, xSpeed, ySpeed)) {
 			this.center = new MovablePoint(x, y, xSpeed, ySpeed);
 			this.radius = radius;
 
@@ -32,25 +32,25 @@ public class MovableCircle implements Movable {
 		return radius;
 	}
 
-	public void setRadius(int radius, int x, int y) throws RadiusExc {
+	public void setRadius(int radius, int x, int y, int xSpeed, int ySpeed) throws RadiusExc {
 
-		if (check(radius, x, y) == false) {
+		if (check(radius, x, y, xSpeed, ySpeed) == false) {
 			throw new RadiusExc("raza trebuie sa fie pozitiva");
 
-		} else if (check(radius, x, y) == false) {
+		} else if (check(radius, x, y, xSpeed, ySpeed) == false) {
 			throw new RadiusExc("cercul nu se afla in plan");
 		}
 
-		else if (check(radius, x, y)) {
+		else if (check(radius, x, y, xSpeed, ySpeed)) {
 			this.radius = radius;
 
 		}
 	}
 
-	public boolean check(int radius, int x, int y) throws RadiusExc {
+	public boolean check(int radius, int x, int y, int xSpeed, int ySpeed) {
 		boolean i;
-		if (radius < 0 || radius == 0 || (radius + x) > PLAIN_X_MAX || (x - radius) < PLAIN_X_MIN
-				|| (radius + y) > PLAIN_Y_MAX || (y - radius) < PLAIN_Y_MIN) {
+		if (radius < 0 || radius == 0 || (radius + x + xSpeed) > PLAIN_X_MAX || (x - radius - xSpeed) < PLAIN_X_MIN
+				|| (radius + y + ySpeed) > PLAIN_Y_MAX || (y - radius - ySpeed) < PLAIN_Y_MIN) {
 			i = false;
 		} else {
 			i = true;
@@ -87,28 +87,64 @@ public class MovableCircle implements Movable {
 		return "MovableCircle [raza=" + radius + ", centru=" + center + "]";
 	}
 
+	public int getSpeedX() {
+		return center.getxSpeed();
+	}
+
+	public int getSpeedY() {
+		return center.getySpeed();
+	}
+
 	@Override
 	public void moveUp() throws YoutOfPlainExc, HowMuchExc, XoutOfPlainExc {
-
-		moveUp(this.center.getySpeed());
+		if ((this.getRadius() + this.getCenterX() + this.getSpeedX()) > PLAIN_X_MAX
+				|| (this.getCenterX() - this.getRadius() - this.getSpeedX()) < PLAIN_X_MIN
+				|| (this.getRadius() + this.getCenterY() + this.getSpeedY()) > PLAIN_Y_MAX
+				|| (this.getCenterY() - this.getRadius() - this.getSpeedY()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc("cercul s-a deplasat prea mult in sus ");
+		} else {
+			center.moveUp(this.center.getySpeed());
+		}
 
 	}
 
 	@Override
 	public void moveDown() throws YoutOfPlainExc, HowMuchExc, XoutOfPlainExc {
-		moveUp(this.center.getySpeed());
+
+		if ((this.getRadius() + this.getCenterX() + this.getSpeedX()) > PLAIN_X_MAX
+				|| (this.getCenterX() - this.getRadius() - this.getSpeedX()) < PLAIN_X_MIN
+				|| (this.getRadius() + this.getCenterY() + this.getSpeedY()) > PLAIN_Y_MAX
+				|| (this.getCenterY() - this.getRadius() - this.getSpeedY()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc("cercul s-a deplasat prea mult in jos ");
+		} else {
+
+			center.moveDown(this.center.getySpeed());
+		}
 
 	}
 
 	@Override
 	public void moveLeft() throws XoutOfPlainExc, HowMuchExc, YoutOfPlainExc {
-
-		moveLeft(this.center.getxSpeed());
+		if ((this.getRadius() + this.getCenterX() + this.getSpeedX()) > PLAIN_X_MAX
+				|| (this.getCenterX() - this.getRadius() - this.getSpeedX()) < PLAIN_X_MIN
+				|| (this.getRadius() + this.getCenterY() + this.getSpeedY()) > PLAIN_Y_MAX
+				|| (this.getCenterY() - this.getRadius() - this.getSpeedY()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc("cercul s-a deplasat prea mult in stanga ");
+		} else {
+			center.moveLeft(this.center.getxSpeed());
+		}
 	}
 
 	@Override
 	public void moveRight() throws XoutOfPlainExc, HowMuchExc, YoutOfPlainExc {
-		moveRight(this.center.getxSpeed());
+		if ((this.getRadius() + this.getCenterX() + this.getSpeedX()) > PLAIN_X_MAX
+				|| (this.getCenterX() - this.getRadius() - this.getSpeedX()) < PLAIN_X_MIN
+				|| (this.getRadius() + this.getCenterY() + this.getSpeedY()) > PLAIN_Y_MAX
+				|| (this.getCenterY() - this.getRadius() - this.getSpeedY()) < PLAIN_Y_MIN) {
+			throw new HowMuchExc("cercul s-a deplasat prea mult in dreapta ");
+		} else {
+			center.moveRight(this.center.getxSpeed());
+		}
 
 	}
 
@@ -125,6 +161,9 @@ public class MovableCircle implements Movable {
 			y += howMuch;
 			this.setCenterY(y);
 		}
+		// int y=this.getCenterY();
+		// int radius= this.getRadius();
+		// int x=this.getCenterX();
 
 	}
 
@@ -171,10 +210,7 @@ public class MovableCircle implements Movable {
 			x += howMuch;
 			this.setCenterX(x);
 		}
-		
-		
-	}
 
-	
+	}
 
 }
